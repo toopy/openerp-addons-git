@@ -1,3 +1,4 @@
 "id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_git_commit_group_all","git_commit group_user_all","model_git_commit",,1,0,0,0
 "access_git_repository_group_all","git_repository group_user_all","model_git_repository",,1,0,0,0
 "access_git_repository_group_user","git_repository group_user","model_git_repository","base.group_partner_manager",1,1,1,1

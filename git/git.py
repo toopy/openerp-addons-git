@@ -9,6 +9,21 @@ from pygit2 import GIT_SORT_TIME
 from pygit2 import Repository
 
 
+class git_commit(osv.osv):
+
+    _name = 'git.commit'
+    _description = 'Git commit.'
+    _columns = {
+        'author': fields.char('Author', size=64, required=True),
+        'email': fields.char('Email', size=64, required=True),
+        'date': fields.datetime('Date', required=True),
+        'description': fields.char('Description', size=64, required=True),
+    }
+
+
+git_commit()
+
+
 class git_repository(osv.osv):
 
     _name = 'git.repository'
