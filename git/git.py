@@ -9,10 +9,10 @@ from pygit2 import GIT_SORT_TIME
 from pygit2 import Repository
 
 
-class git_repositories(osv.osv):
+class git_repository(osv.osv):
 
-    _name = 'git.repositories'
-    _description = 'Git repositories.'
+    _name = 'git.repository'
+    _description = 'Git repository.'
     _columns = {
         'name': fields.char('Name', size=64, required=True, select=True),
     }
@@ -55,17 +55,16 @@ class git_repositories(osv.osv):
         pass
 
     def create(self, cr, uid, values, context=None):
-        _id = super(git_repositories, self).create(cr, uid, values,
+        _id = super(git_repository, self).create(cr, uid, values,
                                                    context=context)
         repo = self.browse(cr, uid, _id)
         self.update_commits(cr, uid, repo)
         return _id
 
     def write(self, cr, uid, ids, values, context=None):
-        ids = super(git_repositories, self).write(cr, uid, ids, values,
-                                                  context=context)
-        # ensures ids list
-        ids = ids if isinstance(ids, list) else [ids]
+        if not super(git_repository, self).write(cr, uid, ids, values,
+                                                 context=context):
+            return False
         # update commits for the given repositories
         for repo in self.browse(cr, uid, ids):
             self.update_commits(cr, uid, repo)
@@ -73,8 +72,8 @@ class git_repositories(osv.osv):
 
     def unlink(cr, uid, ids, context=None):
         self.delete_commits(cr, uid, ids)
-        return super(git_repositories, self).unlink(cr, uid, ids, values,
+        return super(git_repository, self).unlink(cr, uid, ids, values,
                                                     context=context)
 
 
-git_repositories()
+git_repository()

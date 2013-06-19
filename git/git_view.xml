@@ -4,8 +4,8 @@
 
     <!-- Repositories -->
     <record model="ir.ui.view" id="view_git_repositories_tree">
-        <field name="name">git.repositories.tree</field>
-        <field name="model">git.repositories</field>
+        <field name="name">git.repository.tree</field>
+        <field name="model">git.repository</field>
         <field name="type">tree</field>
         <field name="arch" type="xml">
             <tree string="Git Repositories">
@@ -15,8 +15,8 @@
     </record>
 
     <record model="ir.ui.view" id="view_git_repositories_form">
-        <field name="name">git.repositories.form</field>
-        <field name="model">git.repositories</field>
+        <field name="name">git.repository.form</field>
+        <field name="model">git.repository</field>
         <field name="type">form</field>
         <field name="arch" type="xml">
             <form string="Git Repositories">
@@ -25,16 +25,16 @@
         </field>
     </record>
 
-    <record model="ir.actions.act_window" id="action_git_repositories">
+    <record model="ir.actions.act_window" id="action_git_repository">
         <field name="name">Git Repositories</field>
         <field name="type">ir.actions.act_window</field>
-        <field name="res_model">git.repositories</field>
+        <field name="res_model">git.repository</field>
         <field name="view_type">form</field>
     </record>
 
     <menuitem id="menu_git" name="Git" groups="base.group_user" sequence="600"/>
     <menuitem id="menu_git_git" name="Git" parent="menu_git"/>
-    <menuitem id="menu_git_git_repositories" name="Repositories" parent="menu_git_git" action="action_git_repositories" sequence="1"/>
+    <menuitem id="menu_git_git_repository" name="Repositories" parent="menu_git_git" action="action_git_repository" sequence="1"/>
 
     </data>
 </openerp>
