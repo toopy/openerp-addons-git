@@ -11,7 +11,7 @@ from pygit2 import GIT_SORT_TIME
 from pygit2 import Repository
 
 
-class git_commit(osv.osv):
+class git_commit(osv.Model):
 
     _name = 'git.commit'
     _description = 'Git commit.'
@@ -28,7 +28,7 @@ class git_commit(osv.osv):
 git_commit()
 
 
-class git_repository(osv.osv):
+class git_repository(osv.Model):
 
     _name = 'git.repository'
     _description = 'Git repository.'
