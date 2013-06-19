@@ -59,7 +59,7 @@ class git_repository(osv.osv):
         for commit in repo.walk(repo.head.oid, GIT_SORT_TIME):
             yield commit
 
-    def update_commits(self, cr, uid, repo):
+    def add_commits(self, cr, uid, repo):
         # get commit pool
         _git_commit = self.pool.get('git.commit')
         # iter and add commits
@@ -89,7 +89,7 @@ class git_repository(osv.osv):
         _id = super(git_repository, self).create(cr, uid, values,
                                                    context=context)
         repo = self.browse(cr, uid, _id)
-        self.update_commits(cr, uid, repo)
+        self.add_commits(cr, uid, repo)
         return _id
 
     def write(self, cr, uid, ids, values, context=None):
@@ -102,7 +102,7 @@ class git_repository(osv.osv):
             return False
         # update commits for the given repositories
         for repo in self.browse(cr, uid, ids):
-            if not self.update_commits(cr, uid, repo):
+            if not self.add_commits(cr, uid, repo):
                 return False
         # common result
         return ids
