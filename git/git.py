@@ -1,5 +1,7 @@
 import os
 
+from datetime import datetime
+
 from osv import osv
 from osv import fields
 
@@ -18,6 +20,8 @@ class git_commit(osv.osv):
         'email': fields.char('Email', size=64, required=True),
         'date': fields.datetime('Date', required=True),
         'description': fields.char('Description', size=64, required=True),
+        'repo_id': fields.many2one('git.repository', 'Repository',
+                                   ondelete='cascade')
     }
 
 
@@ -56,18 +60,30 @@ class git_repository(osv.osv):
             yield commit
 
     def update_commits(self, cr, uid, repo):
+        # get commit pool
+        _git_commit = self.pool.get('git.commit')
+        # iter and add commits
         for commit in self.get_commits(repo.name):
-            # TODO get previous commit in db
-            # TODO pass if in db
-            # TODO insert new commit in db
-            pass
+            # insert new commit in db
+            values = {
+                'author': commit.author.name,
+                'email': commit.author.email,
+                'date': datetime.fromtimestamp(commit.commit_time),
+                'description': commit.message.strip(),
+                'repo_id': repo.id
+            }
+            # insert or quit if failed
+            if not _git_commit.create(cr, uid, values):
+                return False
 
-    def delete_commits(self, cr, uid, repo_id):
-        # TODO delete all
-        # _git_commit = self.pool.get('git_commit')
-        # ids = _git_commit.search(cr, uid, [('repo_id', '=', repo_id)])
-        # _git_commit.unlink(cr, uid, ids)
-        pass
+    def delete_commits(self, cr, uid, ids):
+        # little check
+        if not ids:
+            return True
+        # delete all
+        _git_commit = self.pool.get('git.commit')
+        ids = _git_commit.search(cr, uid, [('repo_id', 'in', ids)])
+        return _git_commit.unlink(cr, uid, ids)
 
     def create(self, cr, uid, values, context=None):
         _id = super(git_repository, self).create(cr, uid, values,
@@ -77,18 +93,19 @@ class git_repository(osv.osv):
         return _id
 
     def write(self, cr, uid, ids, values, context=None):
+        # update repo first
         if not super(git_repository, self).write(cr, uid, ids, values,
                                                  context=context):
             return False
+        # removes previous
+        if not self.delete_commits(cr, uid, ids):
+            return False
         # update commits for the given repositories
         for repo in self.browse(cr, uid, ids):
-            self.update_commits(cr, uid, repo)
+            if not self.update_commits(cr, uid, repo):
+                return False
+        # common result
         return ids
-
-    def unlink(cr, uid, ids, context=None):
-        self.delete_commits(cr, uid, ids)
-        return super(git_repository, self).unlink(cr, uid, ids, values,
-                                                    context=context)
 
 
 git_repository()
