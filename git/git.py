@@ -8,7 +8,6 @@ class git_repositories(osv.osv):
     _description = 'Git repositories.'
     _columns = {
         'name': fields.char('Name', size=64, required=True, select=True),
-        'url': fields.char('URL', size=128, required=True, select=True)
     }
 
     def create(self, cr, uid, values, context=None):

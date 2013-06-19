@@ -10,7 +10,6 @@
         <field name="arch" type="xml">
             <tree string="Git Repositories">
                 <field name="name"/>
-                <field name="url"/>
             </tree>
         </field>
     </record>
@@ -21,7 +20,7 @@
         <field name="type">form</field>
         <field name="arch" type="xml">
             <form string="Git Repositories">
-                <field name="url" select="1"/>
+                <field name="name" select="1"/>
             </form>
         </field>
     </record>
